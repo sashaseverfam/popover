@@ -1,0 +1,22 @@
+Building Angular Package
+
+------------------------------------------------------------------------------
+Building entry point 'popover'
+------------------------------------------------------------------------------
+- Compiling with Angular sources in partial compilation mode.
+[32m✔[39m Compiling with Angular sources in partial compilation mode.
+[32m✔[39m Generating FESM and DTS bundles
+- Copying assets
+[32m✔[39m Copying assets
+- Writing package manifest
+[32m✔[39m Writing package manifest
+[32m✔[39m Built popover
+
+------------------------------------------------------------------------------
+Built Angular Package
+- from: D:/my-ai/angular-popover/projects/popover
+- to:   D:/my-ai/angular-popover/dist/popover
+------------------------------------------------------------------------------
+
+Build at: 2026-09-28T13:42:33.254Z - Time: 15719ms
+

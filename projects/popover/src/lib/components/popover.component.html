@@ -1,0 +1,116 @@
+<div
+  class="popover"
+  clickOutside
+  [clickOutsideIgnoreSelector]="outsideIgnoreSelector"
+  (clickOutside)="onClickOutside()"
+>
+  <span
+    class="popover__trigger"
+    role="button"
+    tabindex="0"
+    aria-haspopup="dialog"
+    [attr.aria-expanded]="isOpened()"
+    [attr.aria-controls]="'popover-panel-' + uid()"
+    (click)="toggle()"
+    (keydown.enter)="toggle()"
+    (keydown.space)="$event.preventDefault(); toggle()"
+  >
+    <span #toggleContent>
+      <ng-content select=".popover__toggle-content"></ng-content>
+    </span>
+
+    @if (toggleContent.children.length === 0) {
+      <svg
+        class="popover__icon"
+        [class.popover__icon--active]="isOpened()"
+        width="18"
+        height="18"
+        viewBox="0 0 18 18"
+        fill="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <circle cx="9" cy="9" r="7.75" stroke="currentColor" stroke-width="1.5" />
+        <path
+          d="M7.15 6.9a1.95 1.95 0 1 1 2.74 2.3c-.5.25-.94.6-.94 1.18v.22"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+        <circle cx="8.95" cy="12.6" r="1" fill="currentColor" />
+      </svg>
+    }
+  </span>
+
+  @if (panelVisible()) {
+    <div
+      #panelRef
+      [id]="'popover-panel-' + uid()"
+      class="popover__panel"
+      role="dialog"
+      [attr.aria-label]="effectiveAriaLabel() || null"
+      [attr.aria-labelledby]="effectiveAriaLabel() ? null : 'popover-header-' + uid()"
+      aria-modal="true"
+      [class.popover__panel--closing]="isClosing()"
+      [class.popover__panel--xs]="effectiveSize() === 'xs'"
+      [class.popover__panel--xxs]="effectiveSize() === 'xxs'"
+      [class.popover__panel--auto]="effectivePosition() === 'auto'"
+      [class.popover__panel--auto-bottom]="effectivePosition() === 'auto-bottom'"
+      [class.popover__panel--top]="effectivePosition() === 'top'"
+      [class.popover__panel--top-bottom]="effectivePosition() === 'top-bottom'"
+      [class.popover__panel--right]="effectivePosition() === 'right'"
+      [class.popover__panel--right-top]="effectivePosition() === 'right-top'"
+      [class.popover__panel--right-bottom]="effectivePosition() === 'right-bottom'"
+      [class.popover__panel--left]="effectivePosition() === 'left'"
+      [class.popover__panel--left-top]="effectivePosition() === 'left-top'"
+      [class.popover__panel--left-bottom]="effectivePosition() === 'left-bottom'"
+      [class.popover__panel--bottom]="effectivePosition() === 'bottom'"
+      [class.popover__panel--anim-fade]="effectiveAnimation() === 'fade'"
+      [class.popover__panel--anim-zoom]="effectiveAnimation() === 'zoom'"
+      [class.popover__panel--anim-slide]="effectiveAnimation() === 'slide'"
+      [class.popover__panel--anim-none]="effectiveAnimation() === 'none'"
+      (animationend)="onPanelCreated($event.target!)"
+    >
+      <button
+        type="button"
+        class="popover__close"
+        [attr.aria-label]="effectiveCloseAriaLabel()"
+        (click)="close()"
+      >
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 12 12"
+          fill="none"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            d="M1 1l10 10M11 1L1 11"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+
+      <div [id]="'popover-header-' + uid()" class="popover__header">
+        <ng-content select=".popover__header-content"></ng-content>
+        {{ title() }}
+      </div>
+
+      <div class="popover__body">
+        <ng-content select=".popover__body-content"></ng-content>
+      </div>
+
+      <div class="popover__footer">
+        <ng-content select=".popover__footer-content"></ng-content>
+        @if (effectiveOkClose()) {
+          <button type="button" class="popover__ok" (click)="close()">
+            {{ effectiveOkLabel() }}
+          </button>
+        }
+      </div>
+    </div>
+  }
+</div>

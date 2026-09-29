@@ -1,0 +1,349 @@
+<main class="demo">
+  <header class="demo__header">
+    <h1 class="demo__title">{{ title }}</h1>
+    <p class="demo__lead" [innerHTML]="t().lead"></p>
+    <label class="demo__lang-toggle">
+      <select class="demo__select" [value]="lang()" (change)="lang.set($any($event.target).value)">
+        <option value="ru">RU</option>
+        <option value="en">EN</option>
+      </select>
+    </label>
+  </header>
+
+  <section class="demo__section">
+    <h2 class="demo__section-title" [innerHTML]="t().sections.basic"></h2>
+    <p class="demo__hint">
+      @if (lang() === 'ru') {
+        Если слот переключателя не заполнен, рендерится стандартная иконка-подсказка. Открытие —
+        клик по иконке (или Enter/Space с клавиатуры), закрытие — повторный клик, клик вне
+        popover-а, Escape или крестик.
+      } @else {
+        If the trigger slot is empty, a standard "?" icon is rendered. Open —
+        click the icon (or Enter/Space), close — repeat click, click outside,
+        Escape, or the close button.
+      }
+    </p>
+    <popover uid="demo-basic" [title]="t().basic.title">
+      <span class="popover__body-content" [innerHTML]="t().basic.body"></span>
+    </popover>
+  </section>
+
+  <section class="demo__section">
+    <h2 class="demo__section-title" [innerHTML]="t().sections.custom"></h2>
+    <p class="demo__hint">
+      @if (lang() === 'ru') {
+        Вместо иконки можно передать произвольный контент: текст, ссылку, кнопку.
+      } @else {
+        Instead of an icon, you can pass any content: text, a link, a button.
+      }
+    </p>
+    <popover uid="demo-custom-toggle" [title]="t().customToggle.title">
+      <span class="popover__toggle-content demo__toggle-link">{{ t().customToggle.trigger }}</span>
+      <span class="popover__body-content" [innerHTML]="t().customToggle.body"></span>
+    </popover>
+  </section>
+
+  <section class="demo__section">
+    <h2 class="demo__section-title" [innerHTML]="t().sections.pos"></h2>
+    <p class="demo__hint">{{ t().positions.title }}</p>
+    <div class="demo__positions">
+      @for (item of positions(); track item.uid) {
+        <div class="demo__position-row">
+          <span class="demo__position-label">{{ item.label }}</span>
+          <popover [uid]="item.uid" [position]="item.position" [title]="item.label">
+            <span class="popover__toggle-content demo__chip">{{ item.position }}</span>
+            <span class="popover__body-content">
+              {{ t().positions.body }}{{ item.position }}".
+            </span>
+          </popover>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="demo__section">
+    <h2 class="demo__section-title" [innerHTML]="t().sections.width"></h2>
+    <p class="demo__hint" [innerHTML]="t().widths.title"></p>
+    <div class="demo__positions">
+      @for (w of customWidths(); track w.uid) {
+        <div class="demo__position-row">
+          <span class="demo__position-label">{{ w.title }}</span>
+          <popover
+            [uid]="w.uid"
+            position="auto-bottom"
+            [width]="w.width"
+            [minWidth]="w.minWidth"
+            [maxWidth]="w.maxWidth"
+            [title]="w.title"
+          >
+            <span class="popover__toggle-content demo__chip">{{ w.uid }}</span>
+            <span class="popover__body-content">
+              <strong>{{ w.description }}</strong><br /><br />
+              {{ t().widths.tryResize }}
+            </span>
+          </popover>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="demo__section">
+    <h2 class="demo__section-title" [innerHTML]="t().sections.slots"></h2>
+    <div class="demo__row">
+      <popover uid="demo-slots" position="auto-bottom" [okClose]="true">
+        <span class="popover__toggle-content demo__toggle-link">{{ t().slots.okToggle }}</span>
+        <span class="popover__header-content">{{ t().slots.okHeader }}</span>
+        <span class="popover__body-content">{{ t().slots.okBody }}</span>
+      </popover>
+      <popover uid="demo-footer-slot" position="auto-bottom">
+        <span class="popover__toggle-content demo__chip">{{ t().slots.footerToggle }}</span>
+        <span class="popover__header-content">{{ t().slots.footerHeader }}</span>
+        <span class="popover__body-content" [innerHTML]="t().slots.footerBody"></span>
+        <span class="popover__footer-content">
+          <button type="button" class="demo__button" style="font-size: 11px; padding: 5px 10px;">{{ t().slots.cancel }}</button>
+          <button type="button" class="demo__button" style="font-size: 11px; padding: 5px 10px;">{{ t().slots.save }}</button>
+        </span>
+      </popover>
+    </div>
+  </section>
+
+  <section class="demo__section">
+    <h2 class="demo__section-title" [innerHTML]="t().sections.multi"></h2>
+    <p class="demo__hint">
+      @if (lang() === 'ru') {
+        В режиме <code>[multi]="true"</code> открытие одного popover-а не закрывает остальные:
+        откройте оба переключателя подряд.
+      } @else {
+        In <code>[multi]="true"</code> mode, opening one popover does not close others:
+        try opening both triggers in sequence.
+      }
+    </p>
+    <div class="demo__row">
+      <popover uid="demo-multi-a" [multi]="true" position="auto-bottom" title="Popover A">
+        <span class="popover__toggle-content demo__chip">multi A</span>
+        <span class="popover__body-content">{{ t().multi.bodyA }}</span>
+      </popover>
+      <popover uid="demo-multi-b" [multi]="true" position="auto-bottom" title="Popover B">
+        <span class="popover__toggle-content demo__chip">multi B</span>
+        <span class="popover__body-content">{{ t().multi.bodyB }}</span>
+      </popover>
+    </div>
+  </section>
+
+  <section class="demo__section">
+    <h2 class="demo__section-title" [innerHTML]="t().sections.themes"></h2>
+    <p class="demo__hint" [innerHTML]="t().themes.title"></p>
+    <div class="demo__positions">
+      @for (preset of themePresets(); track preset.uid) {
+        <div class="demo__position-row">
+          <span class="demo__position-label">{{ preset.title }}</span>
+          <popover
+            [uid]="preset.uid"
+            position="auto-bottom"
+            [title]="preset.title"
+            [theme]="preset.theme"
+            [okClose]="true"
+          >
+            <span class="popover__toggle-content demo__chip">{{ preset.uid }}</span>
+            <span class="popover__body-content">
+              <strong>{{ preset.description }}</strong><br />
+              {{ t().themes.bg }}: <code>{{ preset.theme.panelBg }}</code><br />
+              {{ t().themes.border }}: <code>{{ preset.theme.panelBorder }}</code><br />
+              {{ t().themes.radius }}: <code>{{ preset.theme.panelRadius }}</code><br />
+              {{ t().themes.shadow }}: <code>{{ preset.theme.panelShadow }}</code>
+            </span>
+          </popover>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="demo__section">
+    <h2 class="demo__section-title" [innerHTML]="t().sections.anims"></h2>
+    <p class="demo__hint" [innerHTML]="t().animations.title"></p>
+
+    <h3 class="demo__sub-title">{{ t().animations.durationLabel }}</h3>
+    <div class="demo__controls">
+      @for (p of durationPresets; track p) {
+        <button
+          type="button"
+          class="demo__button"
+          [class.demo__button--active]="animationDuration() === p"
+          (click)="setDuration(p)"
+        >
+          {{ p }} ms
+        </button>
+      }
+      <label class="demo__slider-label">
+        {{ t().animations.customValue }}
+        <input
+          type="range"
+          min="50"
+          max="2000"
+          step="50"
+          [value]="animationDuration()"
+          (input)="onDurationInput($event)"
+        />
+        <strong>{{ animationDuration() }} ms</strong>
+      </label>
+    </div>
+
+    <h3 class="demo__sub-title">{{ t().animations.typeLabel }}</h3>
+    <div class="demo__row">
+      @for (anim of animations(); track anim.uid) {
+        <popover
+          [uid]="anim.uid"
+          position="auto-bottom"
+          [animation]="anim.animation"
+          [animationDuration]="animationDuration()"
+          [title]="anim.label"
+        >
+          <span class="popover__toggle-content demo__chip">{{ anim.label }}</span>
+          <span class="popover__body-content">
+            {{ t().animations.animBody }} <code>{{ anim.animation }}</code>
+            @if (lang() === 'ru') {
+              длительностью <code>{{ animationDuration() }}ms</code>. Откройте и закройте её, чтобы увидеть результат.
+            } @else {
+              with duration <code>{{ animationDuration() }}ms</code>. Open and close it to see the result.
+            }
+          </span>
+        </popover>
+      }
+    </div>
+
+    <h3 class="demo__sub-title" [innerHTML]="t().animations.timingLabel"></h3>
+    <p class="demo__hint" [innerHTML]="t().animations.timingHint"></p>
+    <div class="demo__positions">
+      @for (t of timingPresets(); track t.uid) {
+        <div class="demo__position-row">
+          <span class="demo__position-label">{{ t.label }}</span>
+          <popover
+            [uid]="t.uid"
+            position="auto-bottom"
+            animation="zoom"
+            [animationTiming]="t.timing"
+            [animationDuration]="500"
+            [title]="t.label"
+          >
+            <span class="popover__toggle-content demo__chip">{{ t.label }}</span>
+            <span class="popover__body-content">
+              <strong>{{ t.description }}</strong><br /><br />
+              <code>animationTiming="{{ t.timing }}"</code>
+            </span>
+          </popover>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="demo__section">
+    <h2 class="demo__section-title" [innerHTML]="t().sections.z"></h2>
+    <p class="demo__hint" [innerHTML]="t().zIndex.title"></p>
+    <div class="demo__row">
+      <popover uid="demo-zindex-1" position="auto-bottom" [title]="lang() === 'ru' ? 'z-index: 1 (по умолчанию)' : 'z-index: 1 (default)'">
+        <span class="popover__toggle-content demo__chip">z-index: 1</span>
+        <span class="popover__body-content">{{ t().zIndex.default }}</span>
+      </popover>
+      <popover uid="demo-zindex-10" position="auto-bottom" [zIndex]="10" [title]="'z-index: 10'">
+        <span class="popover__toggle-content demo__chip">z-index: 10</span>
+        <span class="popover__body-content">{{ t().zIndex.medium }}</span>
+      </popover>
+      <popover uid="demo-zindex-100" position="auto-bottom" [zIndex]="100" [title]="'z-index: 100'">
+        <span class="popover__toggle-content demo__chip">z-index: 100</span>
+        <span class="popover__body-content">{{ t().zIndex.max }}</span>
+      </popover>
+    </div>
+  </section>
+
+  <section class="demo__section">
+    <h2 class="demo__section-title" [innerHTML]="t().sections.aria"></h2>
+    <p class="demo__hint" [innerHTML]="t().accessibility.title"></p>
+    <div class="demo__row">
+      <popover uid="demo-aria-title" position="auto-bottom" [title]="t().accessibility.fromTitle">
+        <span class="popover__toggle-content demo__chip">title → aria-label</span>
+        <span class="popover__body-content">
+          <code>title="{{ t().accessibility.fromTitle }}"</code> →<br />
+          <code>aria-label="{{ t().accessibility.fromTitle }}"</code>
+        </span>
+      </popover>
+      <popover uid="demo-aria-custom" position="auto-bottom" [ariaLabel]="t().accessibility.custom" [title]="lang() === 'ru' ? 'Заголовок' : 'Title'">
+        <span class="popover__toggle-content demo__chip">[ariaLabel]</span>
+        <span class="popover__body-content">
+          <code>[ariaLabel]="'{{ t().accessibility.custom }}'"</code> →<br />
+          <code>aria-label="{{ t().accessibility.custom }}"</code><br />
+          {{ t().accessibility.customBody }}
+        </span>
+      </popover>
+      <popover uid="demo-aria-labelledby" position="auto-bottom" [title]="''">
+        <span class="popover__toggle-content demo__chip">aria-labelledby</span>
+        <span class="popover__body-content">
+          @if (lang() === 'ru') {
+            Без <code>title</code> и <code>ariaLabel</code> →<br />
+          } @else {
+            Without <code>title</code> and <code>ariaLabel</code> →<br />
+          }
+          <code>aria-labelledby="popover-header-..."</code> — {{ t().accessibility.noTitleBody }}
+        </span>
+      </popover>
+    </div>
+  </section>
+
+  <section class="demo__section">
+    <h2 class="demo__section-title" [innerHTML]="t().sections.close"></h2>
+    <p class="demo__hint" [innerHTML]="t().close.title"></p>
+    <div class="demo__row">
+      <popover uid="demo-close-default" position="auto-bottom" [title]="t().close.defaultTitle">
+        <span class="popover__toggle-content demo__chip">
+          @if (lang() === 'ru') { оба включены } @else { both enabled }
+        </span>
+        <span class="popover__body-content">{{ t().close.defaultBody }}</span>
+      </popover>
+      <popover uid="demo-close-no-outside" position="auto-bottom" [closeOnOutsideClick]="false" [title]="t().close.noOutsideTitle">
+        <span class="popover__toggle-content demo__chip">[closeOnOutsideClick]="false"</span>
+        <span class="popover__body-content">{{ t().close.noOutsideBody }}</span>
+      </popover>
+      <popover uid="demo-close-no-escape" position="auto-bottom" [closeOnEscape]="false" [title]="t().close.noEscapeTitle">
+        <span class="popover__toggle-content demo__chip">[closeOnEscape]="false"</span>
+        <span class="popover__body-content">{{ t().close.noEscapeBody }}</span>
+      </popover>
+      <popover uid="demo-close-manual" position="auto-bottom" [closeOnOutsideClick]="false" [closeOnEscape]="false" [title]="t().close.manualTitle">
+        <span class="popover__toggle-content demo__chip">
+          @if (lang() === 'ru') { оба отключены } @else { both disabled }
+        </span>
+        <span class="popover__body-content">{{ t().close.manualBody }}</span>
+      </popover>
+    </div>
+  </section>
+
+  <section class="demo__section">
+    <h2 class="demo__section-title" [innerHTML]="t().sections.customLabels"></h2>
+    <p class="demo__hint" [innerHTML]="t().labels.title"></p>
+    <div class="demo__row">
+      <popover uid="demo-labels-default" position="auto-bottom" [okClose]="true" [title]="t().labels.defaultTitle">
+        <span class="popover__toggle-content demo__chip">
+          @if (lang() === 'ru') { ok / Закрыть } @else { ok / Close }
+        </span>
+        <span class="popover__body-content" [innerHTML]="t().labels.defaultBody"></span>
+      </popover>
+      <popover uid="demo-labels-custom" position="auto-bottom" [okClose]="true" [okLabel]="lang() === 'ru' ? 'Понял' : 'Got it'" [closeAriaLabel]="lang() === 'ru' ? 'Закрыть окно подсказки' : 'Close tooltip'" [title]="t().labels.customTitle">
+        <span class="popover__toggle-content demo__chip">
+          @if (lang() === 'ru') { Понял / Закрыть окно } @else { Got it / Close tooltip }
+        </span>
+        <span class="popover__body-content" [innerHTML]="t().labels.customBody"></span>
+      </popover>
+      <popover uid="demo-labels-ru" position="auto-bottom" [okClose]="true" [okLabel]="lang() === 'ru' ? 'Принять' : 'Accept'" [closeAriaLabel]="lang() === 'ru' ? 'Скрыть' : 'Hide'" [title]="t().labels.ruTitle">
+        <span class="popover__toggle-content demo__chip">
+          @if (lang() === 'ru') { Принять / Скрыть } @else { Accept / Hide }
+        </span>
+        <span class="popover__body-content" [innerHTML]="t().labels.ruBody"></span>
+      </popover>
+    </div>
+  </section>
+
+  <section class="demo__section">
+    <h2 class="demo__section-title" [innerHTML]="t().sections.redux"></h2>
+    <p class="demo__hint" [innerHTML]="t().redux.title"></p>
+    <p class="demo__label">componentState['libs/PopoverState']:</p>
+    <pre class="demo__json" [textContent]="jsonState()"></pre>
+  </section>
+</main>

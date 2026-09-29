@@ -1,0 +1,419 @@
+$popover-size-breakpoint: 1440px;
+$popover-mobile-breakpoint: 768px;
+
+:host {
+  --popover-panel-bg: #ffffff;
+  --popover-panel-border: none;
+  --popover-panel-radius: 9px;
+  --popover-panel-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.2);
+  --popover-panel-width: auto;
+  --popover-panel-mobile-width: auto;
+  --popover-panel-min-width: 200px;
+  --popover-panel-max-width: 500px;
+  --popover-text-color: #4c5569;
+  --popover-accent-color: #e53935;
+  --popover-icon-color: #a5adbb;
+  --popover-icon-hover-color: var(--popover-accent-color);
+  --popover-font-size: 12px;
+  --popover-body-max-height: 265px;
+  --popover-animation-duration: 300ms;
+  --popover-animation-timing: cubic-bezier(0.16, 1, 0.3, 1);
+  --popover-z-index: 1;
+
+  display: inline-block;
+  position: relative;
+}
+
+.popover {
+  display: inline-block;
+  position: relative;
+
+  &__trigger {
+    display: inline-block;
+
+    &:focus-visible {
+      outline: 2px solid var(--popover-accent-color);
+      outline-offset: 2px;
+    }
+  }
+
+  &__icon {
+    color: var(--popover-icon-color);
+    cursor: pointer;
+    display: block;
+    transition: color 0.2s ease-in-out;
+
+    &:hover,
+    &--active {
+      color: var(--popover-icon-hover-color);
+    }
+  }
+
+  &__panel {
+    background-color: var(--popover-panel-bg);
+    border: var(--popover-panel-border);
+    border-radius: var(--popover-panel-radius);
+    box-shadow: var(--popover-panel-shadow);
+    color: var(--popover-text-color);
+    cursor: default;
+    font-size: var(--popover-font-size);
+    max-width: var(--popover-panel-max-width);
+    min-width: var(--popover-panel-min-width);
+    width: var(--popover-panel-width);
+    padding: 20px;
+    position: absolute;
+    top: -25px;
+    white-space: normal;
+    z-index: var(--popover-z-index);
+
+    &--closing {
+      pointer-events: none;
+
+      &.popover__panel--anim-fade {
+        animation: popoverFadeOut var(--popover-animation-duration)
+          var(--popover-animation-timing) forwards;
+      }
+
+      &.popover__panel--anim-zoom {
+        animation: popoverZoomOut var(--popover-animation-duration)
+          var(--popover-animation-timing) forwards;
+      }
+
+      &.popover__panel--anim-slide {
+        animation: popoverSlideOut var(--popover-animation-duration)
+          var(--popover-animation-timing) forwards;
+      }
+
+      &.popover__panel--anim-none {
+        animation: none;
+        opacity: 0;
+      }
+    }
+
+    &::after {
+      background-color: var(--popover-panel-bg);
+      border: none;
+      border-top: var(--popover-panel-border);
+      border-left: var(--popover-panel-border);
+      box-sizing: border-box;
+      content: '';
+      display: block;
+      height: 12px;
+      pointer-events: none;
+      position: absolute;
+      width: 12px;
+      z-index: 2;
+    }
+
+    &--auto {
+      left: 0;
+      margin-top: 10px;
+      top: 100%;
+
+      &::after {
+        display: none;
+      }
+    }
+
+    &--auto-bottom {
+      left: 0;
+      margin-top: 20px;
+      top: 100%;
+
+      &::after {
+        left: 24px;
+        top: -6px;
+        transform: rotate(45deg);
+      }
+    }
+
+    &--top {
+      bottom: 100%;
+      left: 0;
+      margin-bottom: 20px;
+      top: auto;
+
+      &::after {
+        border-top: none;
+        border-bottom: var(--popover-panel-border);
+        left: 24px;
+        bottom: -6px;
+        transform: rotate(225deg);
+      }
+    }
+
+    &--top-bottom {
+      bottom: 100%;
+      left: 0;
+      margin-bottom: 10px;
+      top: auto;
+
+      &::after {
+        display: none;
+      }
+    }
+
+    &--right {
+      left: 150%;
+
+      &::after {
+        left: -6px;
+        top: 30px;
+        transform: rotate(-45deg);
+      }
+    }
+
+    &--right-top {
+      left: 150%;
+      top: 0;
+
+      &::after {
+        left: -6px;
+        top: 16px;
+        transform: rotate(-45deg);
+      }
+    }
+
+    &--right-bottom {
+      bottom: 0;
+      left: 150%;
+      top: auto;
+
+      &::after {
+        bottom: 16px;
+        left: -6px;
+        top: auto;
+        transform: rotate(-45deg);
+      }
+    }
+
+    &--left {
+      right: 150%;
+
+      &::after {
+        right: -6px;
+        top: 30px;
+        transform: rotate(135deg);
+      }
+    }
+
+    &--left-top {
+      right: 150%;
+      top: 0;
+
+      &::after {
+        right: -6px;
+        top: 16px;
+        transform: rotate(135deg);
+      }
+    }
+
+    &--left-bottom {
+      bottom: -20px;
+      right: 100%;
+      top: auto;
+
+      &::after {
+        bottom: 30px;
+        right: -6px;
+        top: auto;
+        transform: rotate(135deg);
+      }
+    }
+
+    &--bottom {
+      max-width: 500px;
+      min-width: max-content;
+      right: -15px;
+      top: 40px;
+
+      &::after {
+        right: 24px;
+        top: -6px;
+        transform: rotate(45deg);
+      }
+    }
+
+    &--anim-fade {
+      animation: popoverFadeIn var(--popover-animation-duration)
+        var(--popover-animation-timing) forwards;
+    }
+
+    &--anim-zoom {
+      animation: popoverZoomIn var(--popover-animation-duration)
+        var(--popover-animation-timing) forwards;
+      transform-origin: top left;
+    }
+
+    &--anim-slide {
+      animation: popoverSlideIn var(--popover-animation-duration)
+        var(--popover-animation-timing) forwards;
+    }
+
+    &--anim-none {
+      animation: none;
+    }
+  }
+
+  &__close {
+    background: none;
+    border: none;
+    color: var(--popover-accent-color);
+    cursor: pointer;
+    line-height: 0;
+    padding: 0;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    z-index: 10;
+
+    &:focus-visible {
+      outline: 2px solid var(--popover-accent-color);
+      outline-offset: 2px;
+    }
+  }
+
+  &__header {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    min-height: 18px;
+    padding-right: 20px;
+  }
+
+  &__body {
+    font-size: var(--popover-font-size);
+    line-height: 1.5;
+    max-height: var(--popover-body-max-height);
+    overflow: auto;
+    scrollbar-gutter: stable;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 16px;
+    min-height: 0;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  &__ok {
+    background: none;
+    border: none;
+    color: var(--popover-text-color);
+    cursor: pointer;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 0;
+    text-transform: uppercase;
+
+    &:hover {
+      color: var(--popover-accent-color);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--popover-accent-color);
+      outline-offset: 2px;
+    }
+  }
+}
+
+@keyframes popoverFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popoverZoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes popoverSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popoverFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes popoverZoomOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+@keyframes popoverSlideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popover__panel {
+    animation: none !important;
+  }
+}
+
+@media (max-width: $popover-size-breakpoint) {
+  .popover__panel {
+    &--xs {
+      min-width: 180px;
+      width: 240px;
+    }
+
+    &--xxs {
+      min-width: 150px;
+      width: 210px;
+    }
+  }
+}
+
+@media (max-width: $popover-mobile-breakpoint) {
+  .popover__panel {
+    @supports (width: var(--popover-panel-mobile-width)) {
+      width: var(--popover-panel-mobile-width);
+    }
+
+    max-width: min(var(--popover-panel-max-width), calc(100vw - 32px)) !important;
+    min-width: min(var(--popover-panel-min-width), calc(100vw - 32px));
+  }
+}
